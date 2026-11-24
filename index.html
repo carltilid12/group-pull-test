@@ -4,20 +4,288 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Home · Our School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Page-specific styles for home.html (shared styles live in css/style.css) */
+    :root {
+      --navy: #1d3c78;
+      --navy-deep: #12285a;
+      --gold: #f2b544;
+      --ink: #1b2233;
+      --muted: #5b6478;
+      --paper: #f7f8fc;
+      --card: #ffffff;
+      --line: #e3e7f0;
+      --radius: 16px;
+    }
+
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    h1, h2, h3 { font-family: "Fraunces", Georgia, serif; line-height: 1.15; margin: 0; }
+
+    /* Nav */
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1.25rem;
+      padding: .9rem clamp(1rem, 4vw, 3rem);
+      background: rgba(29, 60, 120, .96);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .12);
+    }
+    nav a {
+      margin: 0; font-weight: 500; font-size: .95rem;
+      opacity: .85; padding: .25rem 0;
+      border-bottom: 2px solid transparent;
+      transition: opacity .2s, border-color .2s;
+    }
+    nav a:hover, nav a[aria-current="page"] { opacity: 1; border-color: var(--gold); }
+
+    main { max-width: none; margin: 0; padding: 0; }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem); }
+
+    /* Hero */
+    .hero {
+      position: relative; overflow: hidden;
+      color: #fff;
+      background:
+        radial-gradient(circle at 85% 20%, rgba(242, 181, 68, .35), transparent 40%),
+        radial-gradient(circle at 10% 90%, rgba(255, 255, 255, .12), transparent 45%),
+        linear-gradient(135deg, var(--navy-deep), var(--navy));
+      padding: clamp(4rem, 10vw, 7rem) 0 clamp(5rem, 11vw, 8rem);
+    }
+    .eyebrow {
+      display: inline-block; font-size: .8rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .hero h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); max-width: 14ch; }
+    .hero h1 em { font-style: normal; color: var(--gold); }
+    .hero p { max-width: 52ch; font-size: 1.15rem; opacity: .9; margin: 1.25rem 0 2rem; }
+
+    .btns { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .btn {
+      display: inline-block; padding: .85rem 1.5rem; border-radius: 999px;
+      font-weight: 600; text-decoration: none;
+      transition: transform .2s, box-shadow .2s, background .2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-gold { background: var(--gold); color: var(--navy-deep); box-shadow: 0 8px 20px rgba(242, 181, 68, .35); }
+    .btn-ghost { color: #fff; border: 1.5px solid rgba(255, 255, 255, .5); }
+    .btn-ghost:hover { background: rgba(255, 255, 255, .1); }
+
+    /* Stats strip */
+    .stats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      background: var(--card); border-radius: var(--radius);
+      box-shadow: 0 20px 40px rgba(18, 40, 90, .12);
+      margin-top: -3.5rem; position: relative;
+    }
+    .stat { padding: 1.5rem; text-align: center; border-left: 1px solid var(--line); }
+    .stat:first-child { border-left: 0; }
+    .stat strong { display: block; font-family: "Fraunces", serif; font-size: 2rem; color: var(--navy); }
+    .stat span { color: var(--muted); font-size: .9rem; }
+
+    /* Sections */
+    section { padding: clamp(3.5rem, 8vw, 5.5rem) 0; }
+    .section-head { margin-bottom: 2.5rem; max-width: 60ch; }
+    .section-head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: .6rem; }
+    .section-head p { color: var(--muted); margin: 0; }
+
+    .grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 1.75rem; transition: transform .25s, box-shadow .25s;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(18, 40, 90, .1); }
+    .card .icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: grid; place-items: center; font-size: 1.5rem;
+      background: #eef2fb; margin-bottom: 1rem;
+    }
+    .card h3 { font-size: 1.25rem; margin-bottom: .5rem; }
+    .card p { color: var(--muted); margin: 0 0 1rem; }
+    .card a { color: var(--navy); font-weight: 600; text-decoration: none; }
+    .card a:hover { text-decoration: underline; }
+
+    /* Welcome / quote */
+    .welcome { background: var(--card); border-block: 1px solid var(--line); }
+    .welcome .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+    .welcome h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: 1rem; }
+    .welcome p { color: var(--muted); }
+    blockquote {
+      margin: 0; padding: 2rem; border-radius: var(--radius);
+      background: linear-gradient(135deg, #eef2fb, #fdf4e2);
+      font-family: "Fraunces", serif; font-size: 1.35rem; line-height: 1.4; color: var(--navy-deep);
+      position: relative;
+    }
+    blockquote::before {
+      content: "\201C"; position: absolute; top: -.6rem; left: 1rem;
+      font-size: 5rem; color: var(--gold); line-height: 1;
+    }
+    blockquote cite { display: block; margin-top: 1rem; font-family: "Inter", sans-serif; font-size: .9rem; font-style: normal; color: var(--muted); }
+
+    /* News */
+    .news-item { display: flex; flex-direction: column; }
+    .news-item time {
+      font-size: .8rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--gold); filter: brightness(.8); margin-bottom: .5rem;
+    }
+    .news-item p { flex: 1; }
+
+    /* CTA */
+    .cta {
+      text-align: center; color: #fff; border-radius: 24px;
+      padding: clamp(2.5rem, 6vw, 4rem) 1.5rem;
+      background: linear-gradient(135deg, var(--navy), var(--navy-deep));
+    }
+    .cta h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: .75rem; }
+    .cta p { opacity: .85; margin: 0 auto 1.75rem; max-width: 48ch; }
+    .cta .btns { justify-content: center; }
+
+    footer { padding: 2.5rem 1rem; border-top: 1px solid var(--line); background: var(--card); }
+
+    @media (max-width: 760px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stat:nth-child(3) { border-left: 0; }
+      .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+      .welcome .wrap { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
 </head>
 <body>
   <nav>
-    <a href="index.html">Home</a>
+    <a href="index.html" aria-current="page">Home</a>
     <a href="about.html">About</a>
     <a href="academics.html">Academics</a>
     <a href="admissions.html">Admissions</a>
     <a href="news.html">News</a>
     <a href="contact.html">Contact</a>
   </nav>
+
   <main>
-    <h1>Welcome to Our School</h1>
-    <p>This site is being rebuilt by our team, one page at a time.</p>
+    <header class="hero">
+      <div class="wrap">
+        <span class="eyebrow">Welcome to Our School</span>
+        <h1>Where curious minds <em>grow</em> into leaders.</h1>
+        <p>A caring community of students, teachers and families, building strong foundations in learning, character and service.</p>
+        <div class="btns">
+          <a class="btn btn-gold" href="admissions.html">Apply for Admission</a>
+          <a class="btn btn-ghost" href="about.html">Discover Our Story</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <div class="stats">
+        <div class="stat"><strong>50+</strong><span>Years of excellence</span></div>
+        <div class="stat"><strong>1,200</strong><span>Students enrolled</span></div>
+        <div class="stat"><strong>85</strong><span>Dedicated faculty</span></div>
+        <div class="stat"><strong>30+</strong><span>Clubs &amp; activities</span></div>
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Academics</span>
+          <h2>Programs for every stage</h2>
+          <p>From first steps in the classroom to college-ready graduates, our curriculum meets each learner where they are.</p>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <div class="icon" aria-hidden="true">🌱</div>
+            <h3>Elementary</h3>
+            <p>Hands-on learning that builds reading, numeracy and a love for discovery.</p>
+            <a href="academics.html">Learn more →</a>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">📚</div>
+            <h3>Junior High</h3>
+            <p>A well-rounded core curriculum with room to explore arts, sports and tech.</p>
+            <a href="academics.html">Learn more →</a>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">🎓</div>
+            <h3>Senior High</h3>
+            <p>Specialized strands that prepare students for university and careers.</p>
+            <a href="academics.html">Learn more →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="welcome">
+      <div class="wrap">
+        <div>
+          <span class="eyebrow">Our Mission</span>
+          <h2>Educating the whole person</h2>
+          <p>We believe great schools do more than teach subjects. They shape people. Our teachers mentor every student to think critically, act kindly and lead with integrity.</p>
+          <a class="btn btn-gold" href="about.html">About Us</a>
+        </div>
+        <blockquote>
+          Every child who walks through our doors deserves to be known, challenged and celebrated.
+          <cite>From the Principal's Office</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">News &amp; Events</span>
+          <h2>What's happening on campus</h2>
+        </div>
+        <div class="grid">
+          <article class="card news-item">
+            <time datetime="2026-12-05">Dec 5, 2026</time>
+            <h3>Science &amp; Innovation Fair</h3>
+            <p>Students showcase projects in robotics, environment and health.</p>
+            <a href="news.html">Read more →</a>
+          </article>
+          <article class="card news-item">
+            <time datetime="2026-12-12">Dec 12, 2026</time>
+            <h3>Christmas Concert</h3>
+            <p>An evening of music from our choir, band and performing arts club.</p>
+            <a href="news.html">Read more →</a>
+          </article>
+          <article class="card news-item">
+            <time datetime="2027-01-15">Jan 15, 2027</time>
+            <h3>Enrollment Opens for 2027</h3>
+            <p>Applications for the next school year are now being accepted.</p>
+            <a href="admissions.html">Read more →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding-top: 0;">
+      <div class="wrap">
+        <div class="cta">
+          <h2>Ready to join our community?</h2>
+          <p>Visit our campus, meet our teachers and see why families choose us.</p>
+          <div class="btns">
+            <a class="btn btn-gold" href="admissions.html">Start Your Application</a>
+            <a class="btn btn-ghost" href="contact.html">Schedule a Visit</a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer>Page by Carl Christian Tilid</footer>
 </body>
 </html>
